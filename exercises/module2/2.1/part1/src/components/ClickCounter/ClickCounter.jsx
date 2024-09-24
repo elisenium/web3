@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-const ClickCounter = () => {
+const ClickCounter = ({ title }) => {
     const [count, setCount] = useState(0)
 
     return (
@@ -9,7 +9,7 @@ const ClickCounter = () => {
           count is {count}
         </button>
         <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
+          {count >= 10 ? `You are a master in the art of clicking !` : title}
         </p>
       </div>
     )
