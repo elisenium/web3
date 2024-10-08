@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
-const baseUrl = 'http://localhost:3001/persons'
+import personService from './services/person'
 
 
 const App = () => {
@@ -9,11 +8,10 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
 
   useEffect(() => {
-    console.log('effect')
-    axios
-      .get(baseUrl)
-      .then(response => {
-        setPersons(response.data)
+    personService
+      .getAll()
+      .then(initialName => {
+        setPersons(initialName)
       })
   }, [])
 
@@ -30,30 +28,26 @@ const App = () => {
   const addPerson = (event) => {
     event.preventDefault()
     const personObject = {
-      id: `${persons.length + 1}`,
       name: newName,
-      number: newNumber
+      number: newNumber,
+      id: `${persons.length + 1}`
     }
 
     if (isAlreadyAdded(newName)) 
       alert(`${newName} is already added to phonebook`)
 
-    else
-      console.log();
-      axios
-      .post(baseUrl, personObject)
-      .then(response => {
-        console.log(response)
-        setPersons(persons.concat(personObject))
+    personService
+      .create(personObject)
+      .then(returnedPerson => {
+        setPersons(persons.concat(returnedPerson))
         setNewName('')
         setNewNumber('')
-      })
-    
+      })  
   }
 
   const isAlreadyAdded = (name) => {
-    if (name === '') return false
-    return persons.some(person => person.name === name)
+  if (name === '') return false
+  return persons.some(person => person.name === name)
   }
 
   return (
@@ -61,9 +55,7 @@ const App = () => {
       <h2>Phonebook</h2>
       <form onSubmit={addPerson}>
         <div>
-          name: 
-          <input 
-            type="text" 
+          name: <input  
             value={newName} 
             onChange={handleNameChange} />
         </div>
