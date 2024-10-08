@@ -1,11 +1,21 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import axios from 'axios'
+const baseUrl = 'http://localhost:3001/persons'
+
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas' }
-  ])
+  const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
+
+  useEffect(() => {
+    console.log('effect')
+    axios
+      .get(baseUrl)
+      .then(response => {
+        setPersons(response.data)
+      })
+  }, [])
 
   const handleNameChange = (event) => {
     console.log(event.target.value)
@@ -24,13 +34,20 @@ const App = () => {
       name: newName,
       number: newNumber
     }
+
     if (isAlreadyAdded(newName)) 
       alert(`${newName} is already added to phonebook`)
-    
-    else 
-      setPersons(persons.concat(personObject))
-      setNewName('')
-      setNewNumber('')
+
+    else
+      console.log();
+      axios
+      .post(baseUrl, personObject)
+      .then(response => {
+        console.log(response)
+        setPersons(persons.concat(personObject))
+        setNewName('')
+        setNewNumber('')
+      })
     
   }
 
