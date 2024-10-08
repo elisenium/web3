@@ -49,6 +49,8 @@ const App = () => {
             type="text" 
             value={newName} 
             onChange={handleNameChange} />
+        </div>
+        <div>
           number:
           <input 
             type="text" 
