@@ -1,99 +1,99 @@
 const router = require('express').Router()
-const Person = require('../models/person')
+const Person = require("../models/person")
+const NotFoundError = require('../utils/NotFoundError')
 
-// Data. This emulates a datastore
-const allPersons = [
-  {
-    id: 1,
-    name: "Arto Hellas",
-    number: "040-123456",
-  },
-  {
-    id: 2,
-    name: "Ada lovelace",
-    number: "39-44-5232323",
-  },
-  {
-    id: 3,
-    name: "Dan Abramov",
-    number: "12-43-2345345",
-  },
-  {
-    id: 4,
-    name: "Mary Poppendick",
-    number: "39-23-64234122",
-  },
-]
 
-router.get("/", (req, res) => {
+// Find all
+router.get("/", (req, res, next) => {
   Person.find({})
     .then(persons => res.json(persons))
+    .catch(err => next(err))
 })
 
-router.get("/:id", (req, res) => {
-  const id = Number(req.params.id)
-  const person = allPersons.find(person => person.id === id)
-
-  if (person) {
-    res.json(person)
-  } else {
-    res.status(404).end()
-  }
+// Find by ID
+router.get("/:id", (req, res, next) => {
+  Person.findById(req.params.id)
+    .then(person => {
+      if (person) {
+        res.json(person)
+      } else {
+        throw new NotFoundError()
+      }
+    })
+    .catch(err => next(err))
 })
 
-router.delete("/:id", (req, res) => {
-  const id = Number(req.params.id)
-  const personIndex = allPersons.findIndex(person => person.id === id)
-  if (personIndex > -1) {
-    allPersons.splice(personIndex, 1) // We do NOT use delete because it creates a sparse array with a wrong length
-  }
-  res.status(204).end()
+// Delete one
+router.delete("/:id", (req, res, next) => {
+  Person.findByIdAndDelete(req.params.id)
+    .then(result => {
+      if (result) {
+        res.json(result)
+      } else {
+        throw new NotFoundError()
+      }
+    })
+    .catch(err => next(err))
 })
 
-router.post("/", (req, res) => {
-  const personPayload = req.body
-  const newId = Math.floor(Math.random() * 1e9)
-  const newPerson = {
-    ...personPayload,
-    id: newId,
-  }
+// Insert one
+router.post("/", (req, res, next) => {
+  const body = req.body
 
+  // Check body
   const errorMessages = []
-  if (!personPayload.name) {
-    errorMessages.push("name must be present")
-  }
-  if (!personPayload.number) {
-    errorMessages.push("number must be present")
-  }
-
-  const nameExists = allPersons.some(person => person.name === newPerson.name)
-  if (nameExists) {
-    errorMessages.push("name must be unique")
-  }
-
+  if (!body.name) errorMessages.push("name must be present")
+  if (!body.number) errorMessages.push("number must be present")
   if (errorMessages.length > 0) {
     res.status(422).json({ errorMessages })
+    return
   }
-  else {
-    // push not concat here. We want to mutate the array.
-    allPersons.push(newPerson)
-    res.json(newPerson)
-  }
+
+  // Check existing
+  Person.find({ name: body.name })
+    .then(person => {
+      if (person && person.length > 0) {
+        errorMessages.push("name must be unique")
+        res.status(422).json({ errorMessages })
+      } else {
+        // Insert
+        const person = new Person(body)
+        person.save().then(result => {
+          res.json(result)
+        })
+          .catch(err => next(err))
+      }
+    })
+    .catch(err => next(err))
 })
 
-router.put("/:id", (req, res) => {
-  const personPayload = req.body
-  const id = Number(req.params.id)
-  const personIndex = allPersons.findIndex(person => person.id === id)
-  if (personIndex === -1) {
-    res.status(404).end()
-  }
-  else {
-    const updatedPerson = { ...personPayload, id:allPersons[personIndex].id }
-    allPersons[personIndex] = updatedPerson
-    res.json(updatedPerson)
-  }
-})
+// Update one
+router.put("/:id", (req, res, next) => {
+  const body = req.body
 
+  // Check body
+  const errorMessages = []
+  if (!body.name) errorMessages.push("name must be present")
+  if (!body.number) errorMessages.push("number must be present")
+  if (errorMessages.length > 0) {
+    res.status(422).json({ errorMessages })
+    return
+  }
+
+  // Update
+  const person = {
+    name: body.name,
+    number: body.number,
+  }
+  Person.findByIdAndUpdate(req.params.id, person, { new: true })
+    .then(updatedPerson => {
+      if (updatedPerson) {
+        res.json(updatedPerson)
+      } else {
+        throw new NotFoundError()
+      }
+    })
+    .catch(error => next(error))
+})
 
 module.exports = router

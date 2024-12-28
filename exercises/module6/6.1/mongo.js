@@ -1,14 +1,18 @@
 const mongoose = require('mongoose')
+const args = process.argv.slice(2);
 
-if (process.argv.length < 3) {
-    console.log('give password as argument')
+// Check if required args are present
+if (args.length < 3) {
+    console.log('Missing required arguments!\n\nUsage: npm start <server> <username> <password> [<name> <number>]\n')
     process.exit(1)
 }
 
-const password = process.argv[2]
+const server = args.shift()
+const username = args.shift()
+const password = args.shift()
 
 const url =
-    `mongodb+srv://elisegrelaud:${password}@cluster0.z1czg.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`
+    `mongodb+srv://${username}:${password}@${server}/?retryWrites=true&w=majority&appName=Cluster0`
 
 mongoose.set('strictQuery', false)
 
