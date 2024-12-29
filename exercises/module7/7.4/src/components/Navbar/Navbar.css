@@ -1,0 +1,19 @@
+.navbar {
+    display: flex;
+    justify-content: flex-end;
+    flex-grow: 1;
+}
+
+.nav-link {
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    margin: 0 10px;
+    background-color: grey;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.nav-link:hover {
+    background-color: black;
+}
