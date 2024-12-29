@@ -13,21 +13,3 @@
   height: 50px;
 }
 
-button {
-  background-color: grey;
-  color: white;
-  padding: 10px 50px;
-  margin: 10px;
-  border: none;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: black;
-}
-
-.btn {
-  display: flex;
-  justify-content: flex-end;
-  flex-grow: 1;
-}
