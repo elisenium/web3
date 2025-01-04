@@ -1,0 +1,53 @@
+@baseUrl=http://localhost:3001
+@bookId = 6461f476d9a9da9dbeade34e
+@otherBookId = 6461f476d9a9da9dbeade37e
+@inexistantBookId = 6461f476d9a9da9dbeade34z
+
+### Complete this file with your own request to tests your API
+### Get all books
+GET {{baseUrl}}/books
+
+### Add a valid comment to a book
+POST {{baseUrl}}/books/{{bookId}}/comments 
+Content-Type: application/json
+
+{
+  "username": "john_doe",
+  "text": "This book is fascinating and very well written."
+}
+
+### Add a non-valid comment to a book
+POST {{baseUrl}}/books/{{bookId}}/comments 
+Content-Type: application/json
+
+{
+  "username": "john_doe",
+  "text": "jspdf"
+}
+
+### Add a non-valid comment to a book
+POST {{baseUrl}}/books/{{bookId}}/comments 
+Content-Type: application/json
+
+{
+  "username": "abc",
+  "text": "This book is fascinating and very well written."
+}
+
+### Add a valid comment to a inexistant book
+POST {{baseUrl}}/books/{{inexistantBookId}}/comments 
+Content-Type: application/json
+
+{
+  "username": "john_doe",
+  "text": "This book is fascinating and very well written."
+}
+
+### Add a valid comment to a book
+POST {{baseUrl}}/books/{{otherBookId}}/comments 
+Content-Type: application/json
+
+{
+  "username": "john_doe",
+  "text": "2222 This book is fascinating and very well written."
+}
