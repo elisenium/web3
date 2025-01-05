@@ -1,9 +1,8 @@
 @baseUrl=http://localhost:3001
 @bookId = 6461f476d9a9da9dbeade34e
-@otherBookId = 6461f476d9a9da9dbeade37e
+@anotherBookId = 6461f476d9a9da9dbeade37e
 @inexistantBookId = 6461f476d9a9da9dbeade34z
 
-### Complete this file with your own request to tests your API
 ### Get all books
 GET {{baseUrl}}/books
 
@@ -44,7 +43,7 @@ Content-Type: application/json
 }
 
 ### Add a valid comment to a book
-POST {{baseUrl}}/books/{{otherBookId}}/comments 
+POST {{baseUrl}}/books/{{anotherBookId}}/comments 
 Content-Type: application/json
 
 {
@@ -53,14 +52,10 @@ Content-Type: application/json
 }
 
 ### Add a valid comment to a book
-POST {{baseUrl}}/books/{{otherBookId}}/comments 
+POST {{baseUrl}}/books/{{anotherBookId}}/comments 
 Content-Type: application/json
 
 {
   "username": "karen",
   "text": "I hate this book with my entire being."
 }
-
-### Get all comments for all books
-GET {{baseUrl}}/books/comments/all
-Accept: application/json

@@ -12,26 +12,6 @@ router.get('/', async (req, res) => {
     }
 });
 
-/* GET all jokes with comments */
-router.get('/comments/all', async (req, res) => {
-    try {
-        const jokes = await Joke.find({});
-        const jokesWithComments = jokes.map(j => ({
-            id: j.id,
-            name: j.name,
-            joke: j.joke,
-            imageUrl: j.imageUrl,
-            comments: j.comments.map(comment => ({
-                username: comment.username,
-                text: comment.text
-            }))
-        }));
-        res.json(jokesWithComments);
-    } catch (err) {
-        res.status(500).json({ message: err.message });
-    }
-});
-
 /* POST add a comment to a joke */ 
 router.post('/:id/comments', async (req, res) => {
     const { username, text } = req.body;

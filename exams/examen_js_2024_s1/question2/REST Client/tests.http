@@ -72,7 +72,3 @@ Content-Type: application/json
   "username": "user",
   "text": "This joke is lame"
 }
-
-### Get all jokes with comments
-GET {{baseUrl}}/jokes/comments/all
-Accept: application/json

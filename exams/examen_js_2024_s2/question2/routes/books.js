@@ -1,31 +1,12 @@
 const router = require('express').Router();
 const Book = require('../models/book');
 
+
 /* GET all books */
 router.get('/', async (req, res) => {
     try {
         const books = await Book.find({});
         res.json(books);
-    } catch (err) {
-        res.status(500).json({ message: err.message });
-    }
-});
-
-/* GET all books with comments */
-router.get('/comments/all', async (req, res) => {
-    try {
-        const books = await Book.find({});
-        const booksWithComments = books.map(book => ({
-            id: book.id,
-            title: book.title,
-            author: book.author,
-            state: book.state,
-            comments: book.comments.map(comment => ({
-                username: comment.username,
-                text: comment.text
-            }))
-        }));
-        res.json(booksWithComments);
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
