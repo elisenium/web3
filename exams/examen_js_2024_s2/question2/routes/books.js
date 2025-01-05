@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const Book = require('../models/book');
 
-// GET all books
+/* GET all books */
 router.get('/', async (req, res) => {
     try {
         const books = await Book.find({});
@@ -11,22 +11,27 @@ router.get('/', async (req, res) => {
     }
 });
 
-// PATCH update book state
-router.patch('/:id', async (req, res) => {
+/* GET all books with comments */
+router.get('/comments/all', async (req, res) => {
     try {
-        const book = await Book.findById(req.params.id);
-        if (!book) {
-            return res.status(404).json({ message: 'Book not found' });
-        }
-        book.state = req.body.state;
-        await book.save();
-        res.json(book);
+        const books = await Book.find({});
+        const booksWithComments = books.map(book => ({
+            id: book.id,
+            title: book.title,
+            author: book.author,
+            state: book.state,
+            comments: book.comments.map(comment => ({
+                username: comment.username,
+                text: comment.text
+            }))
+        }));
+        res.json(booksWithComments);
     } catch (err) {
-        res.status(404).json({ message: 'Book not found' });
+        res.status(500).json({ message: err.message });
     }
 });
 
-// POST add a comment to a book
+/* POST add a comment to a book */
 router.post('/:id/comments', async (req, res) => {
     const { username, text } = req.body;
 

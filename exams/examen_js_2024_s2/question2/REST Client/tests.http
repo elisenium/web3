@@ -51,3 +51,16 @@ Content-Type: application/json
   "username": "john_doe",
   "text": "2222 This book is fascinating and very well written."
 }
+
+### Add a valid comment to a book
+POST {{baseUrl}}/books/{{otherBookId}}/comments 
+Content-Type: application/json
+
+{
+  "username": "karen",
+  "text": "I hate this book with my entire being."
+}
+
+### Get all comments for all books
+GET {{baseUrl}}/books/comments/all
+Accept: application/json
