@@ -1,0 +1,78 @@
+@baseUrl=http://localhost:3001
+@validJokeId=6461f476d9a9da9dbeade38e
+@anotherValidJokeId=6461f476d9a9da9dbeade36e
+@invalidJokeId=invalidJokeId
+
+### Get all jokes
+GET {{baseUrl}}/jokes
+Accept: application/json
+
+### Add a comment to a valid joke
+POST {{baseUrl}}/jokes/{{validJokeId}}/comments
+Accept: application/json
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "text": "This is a test comment."
+}
+
+### Add a comment to a valid joke
+POST {{baseUrl}}/jokes/{{validJokeId}}/comments
+Accept: application/json
+Content-Type: application/json
+
+{
+  "username": "user",
+  "text": "This joke is lame"
+}
+
+### Add a comment with short text (should fail)
+POST {{baseUrl}}/jokes/{{validJokeId}}/comments
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "text": "Hi"
+}
+
+### Add a comment with short username (should fail)
+POST {{baseUrl}}/jokes/{{validJokeId}}/comments
+Content-Type: application/json
+
+{
+  "username": "ab",
+  "text": "This is a test comment."
+}
+
+### Add a duplicate comment (should fail)
+POST {{baseUrl}}/jokes/{{validJokeId}}/comments
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "text": "This is another test comment."
+}
+
+### Add a comment to an invalid joke (should fail)
+POST {{baseUrl}}/jokes/{{invalidJokeId}}/comments
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "text": "This is a test comment."
+}
+
+### Add a comment to a valid joke
+POST {{baseUrl}}/jokes/{{anotherValidJokeId}}/comments
+Accept: application/json
+Content-Type: application/json
+
+{
+  "username": "user",
+  "text": "This joke is lame"
+}
+
+### Get all jokes with comments
+GET {{baseUrl}}/jokes/comments/all
+Accept: application/json
