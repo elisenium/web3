@@ -12,7 +12,7 @@ router.get('/', async (req, res) => {
     }
 });
 
-/* GET all books with comments */
+/* GET all jokes with comments */
 router.get('/comments/all', async (req, res) => {
     try {
         const jokes = await Joke.find({});
