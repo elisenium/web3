@@ -50,7 +50,8 @@
 }
 
 .joke-container img {
+    max-height: 200px; /* css constraint */
+    max-width: 200px; /* css constraint */
     margin-top: 10px;
-    max-width: 100%;
     border-radius: 4px;
 }
